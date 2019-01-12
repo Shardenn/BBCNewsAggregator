@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
@@ -33,7 +34,11 @@ class NewsListFragment : FirebaseDbListFragment<News, NewsViewHolder>() {
     }
 
     override fun getQuery(): Query {
-        return FirebaseDatabase.getInstance().reference.child("news").limitToLast(100)
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+
+        return FirebaseDatabase.getInstance().reference.child("news")
+            .orderByChild("pubDate")
+            .limitToLast(15)
     }
 
     override fun onBindViewHolder(viewHolder: NewsViewHolder, key: String, model: News) {
